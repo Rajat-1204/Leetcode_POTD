@@ -1,35 +1,34 @@
 class Solution
 {
 public:
-    int minBitFlips(int start, int goal)
+    int countConsistentStrings(string allowed, vector<string> &words)
     {
-        int count = 0; // count variable for storing the minimum number of flips needed
-        while (goal != 0 && start != 0)
-        { // traversing the numbers until one of them is zero
-            if ((goal & 1) != (start & 1))
-            { // if their bit is different then we should increase the count
-                count++;
-            }
-            goal = goal >> 1;
-            start = start >> 1;
+        unordered_map<char, int> m; // creating map for storing characters that are there in allowed for easy find functionality
+
+        for (int i = 0; i < allowed.size(); i++)
+        {
+            m[allowed[i]] = 1;
         }
 
-        while (goal != 0)
-        { // checking for the remaining left number
-            if (goal & 1)
-            { // if there is a bit whose value is one needs to be flipped
+        int count = 0; // count variable for consistent strings
+        int n = words.size();
+
+        for (int i = 0; i < n; i++)
+        {                 // for loop for traversing vector words
+            int flag = 0; // flag variable for checking whether any character is missing or not
+            for (char ch : words[i])
+            { // traversing the string present in words
+                if (m[ch] == 0)
+                {
+                    flag = 1; // if any character is missing then we should change the flag
+                    break;
+                }
+            }
+            if (flag == 0)
+            { // if there is all character present then we will increase the count
                 count++;
             }
-            goal = goal >> 1;
         }
-        while (start != 0)
-        { // Same here
-            if (start & 1)
-            {
-                count++;
-            }
-            start = start >> 1;
-        }
-        return count; // returning the answer
+        return count; // returning count
     }
 };

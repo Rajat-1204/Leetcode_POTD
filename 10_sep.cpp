@@ -11,69 +11,44 @@
 class Solution
 {
 public:
-    vector<vector<int>> spiralMatrix(int m, int n, ListNode *head)
+    // function for calculating GCD
+    int gcdcalc(int a, int b)
     {
-        vector<vector<int>> ans(m, vector<int>(n, -1));
-        int up = 0;
-        int down = m - 1;
-        int l = 0;
-        int r = n - 1;
-
-        int dir = 0;
-        int i = up;
-        int j = 0;
-        while (head != NULL)
+        while (a > 0 && b > 0)
         {
-            if (dir == 0)
+            if (a > b)
             {
-                ans[i][j] = head->val;
-                if (j == r)
-                {
-                    dir = 1;
-                    up = up + 1;
-                    i = up;
-                    j = r - 1;
-                }
-                j++;
+                a = a % b;
             }
-            else if (dir == 1)
+            else
             {
-                ans[i][j] = head->val;
-                if (i == down)
-                {
-                    dir = 2;
-                    r = r - 1;
-                    j = r;
-                    i = down - 1;
-                }
-                i++;
+                b = b % a;
             }
-            else if (dir == 2)
-            {
-                ans[i][j] = head->val;
-                if (j == l)
-                {
-                    dir = 3;
-                    down = down - 1;
-                    i = down;
-                    j = l + 1;
-                }
-                j--;
-            }
-            else if (dir == 3)
-            {
-                ans[i][j] = head->val;
-                if (i == up)
-                {
-                    dir = 0;
-                    l = l + 1;
-                    j = l;
-                    i = up + 1;
-                }
-                i--;
-            }
-            head = head->next;
         }
-        return ans;
+
+        if (a == 0)
+        {
+            return b;
+        }
+        return a;
+    }
+    ListNode *insertGreatestCommonDivisors(ListNode *head)
+    {
+        ListNode *temp = head;
+        // Traversing over the linked list until last element
+        while (temp->next != NULL)
+        {
+            ListNode *nexi;
+            if (temp->next)
+            {
+                nexi = temp->next;
+                int val = gcdcalc(temp->val, nexi->val); // calculating the gcd of(temp->val,nexi->val)
+                ListNode *ad = new ListNode(val);        // creating a new node of the value gcd
+                temp->next = ad;                         // connecting ad in between
+                ad->next = nexi;
+            }
+            temp = nexi;
+        }
+        return head; // returning head
     }
 };

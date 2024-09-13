@@ -1,34 +1,30 @@
 class Solution
 {
 public:
-    int countConsistentStrings(string allowed, vector<string> &words)
+    vector<int> xorQueries(vector<int> &arr, vector<vector<int>> &queries)
     {
-        unordered_map<char, int> m; // creating map for storing characters that are there in allowed for easy find functionality
+        vector<int> ans; // for storing answer
 
-        for (int i = 0; i < allowed.size(); i++)
+        for (int i = 1; i < arr.size(); i++)
         {
-            m[allowed[i]] = 1;
+            arr[i] = arr[i] ^ arr[i - 1]; // calculating XOR for the value of arr from 0 to i th index for every i index from 1 -> n-1
         }
 
-        int count = 0; // count variable for consistent strings
-        int n = words.size();
+        for (int i = 0; i < queries.size(); i++)
+        { // this for loop is used for traversing the queries vector
+            int s = queries[i][0];
+            int e = queries[i][1];
 
-        for (int i = 0; i < n; i++)
-        {                 // for loop for traversing vector words
-            int flag = 0; // flag variable for checking whether any character is missing or not
-            for (char ch : words[i])
-            { // traversing the string present in words
-                if (m[ch] == 0)
-                {
-                    flag = 1; // if any character is missing then we should change the flag
-                    break;
-                }
+            if (s == 0)
+            { //  if s is already zero then the value we already calculated from the above for loop is the answer
+                ans.push_back(arr[e]);
             }
-            if (flag == 0)
-            { // if there is all character present then we will increase the count
-                count++;
+
+            else
+            { // otherwiise we have to reduce it using the property of XOR
+                ans.push_back(arr[s - 1] ^ arr[e]);
             }
         }
-        return count; // returning count
+        return ans;
     }
 };

@@ -1,54 +1,35 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution
 {
 public:
-    // function for calculating GCD
-    int gcdcalc(int a, int b)
+    int minBitFlips(int start, int goal)
     {
-        while (a > 0 && b > 0)
-        {
-            if (a > b)
-            {
-                a = a % b;
+        int count = 0; // count variable for storing the minimum number of flips needed
+        while (goal != 0 && start != 0)
+        { // traversing the numbers until one of them is zero
+            if ((goal & 1) != (start & 1))
+            { // if their bit is different then we should increase the count
+                count++;
             }
-            else
-            {
-                b = b % a;
-            }
+            goal = goal >> 1;
+            start = start >> 1;
         }
 
-        if (a == 0)
-        {
-            return b;
-        }
-        return a;
-    }
-    ListNode *insertGreatestCommonDivisors(ListNode *head)
-    {
-        ListNode *temp = head;
-        // Traversing over the linked list until last element
-        while (temp->next != NULL)
-        {
-            ListNode *nexi;
-            if (temp->next)
-            {
-                nexi = temp->next;
-                int val = gcdcalc(temp->val, nexi->val); // calculating the gcd of(temp->val,nexi->val)
-                ListNode *ad = new ListNode(val);        // creating a new node of the value gcd
-                temp->next = ad;                         // connecting ad in between
-                ad->next = nexi;
+        while (goal != 0)
+        { // checking for the remaining left number
+            if (goal & 1)
+            { // if there is a bit whose value is one needs to be flipped
+                count++;
             }
-            temp = nexi;
+            goal = goal >> 1;
         }
-        return head; // returning head
+        while (start != 0)
+        { // Same here
+            if (start & 1)
+            {
+                count++;
+            }
+            start = start >> 1;
+        }
+        return count; // returning the answer
     }
 };
